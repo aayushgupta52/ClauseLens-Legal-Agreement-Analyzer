@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field, field_validator
 from clauselens import __version__
 from clauselens.calculators import bond_cost
 from clauselens.ingest import MAX_BYTES, MAX_CHARS, IngestError, extract_text
-from clauselens.paths import REPORTS
+from clauselens.paths import REPORTS, ROOT
 from clauselens.pii import mask_pii
 from clauselens.pipeline import Analyzer
 from clauselens.qa import ask
@@ -38,7 +38,11 @@ from clauselens.translation import (
 )
 
 WEB_DIR = Path(__file__).parent / "web"
-PROJECT_DIR = Path(__file__).resolve().parents[2]
+# Use the configured repository root. In Docker the package is installed into
+# site-packages, so deriving the project root from __file__ points to Python's
+# installation directory instead of /app. ROOT honors CLAUSELENS_ROOT and is
+# resolved correctly both in local development and in the Render container.
+PROJECT_DIR = ROOT
 FRONTEND_DIST = PROJECT_DIR / "frontend" / "dist"
 Language = str
 
