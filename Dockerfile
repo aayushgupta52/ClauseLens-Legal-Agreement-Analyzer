@@ -10,7 +10,8 @@ RUN npm run build
 FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    CLAUSELENS_ROOT=/app
 WORKDIR /app
 
 # Tesseract supports OCR for text-scanned documents when the app uses it.
