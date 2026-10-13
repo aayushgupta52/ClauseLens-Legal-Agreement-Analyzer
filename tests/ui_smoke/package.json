@@ -1,0 +1,6 @@
+{
+  "name": "clauselens-ui-smoke",
+  "private": true,
+  "description": "Optional browser-less UI check: runs the real page in jsdom against a live server",
+  "dependencies": { "jsdom": "^30.0.0" }
+}

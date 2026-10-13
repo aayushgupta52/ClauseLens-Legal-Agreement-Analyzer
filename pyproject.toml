@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clauselens"
+version = "0.1.0"
+description = "ClauseLens: explains rent agreements and job offer / bond letters"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pyyaml>=6.0",
+    "pydantic>=2.5",
+    "datasketch>=1.6",
+    "scikit-learn>=1.3",
+    "fastapi>=0.110",
+    "uvicorn>=0.27",
+    "python-multipart>=0.0.9",
+    "sqlalchemy>=2.0",
+    "python-docx>=1.0",
+    "pypdf>=4.0",
+    "langgraph>=0.2",
+    "langdetect>=1.0.9",
+]
+
+[project.optional-dependencies]
+data = ["datasets>=2.19"]
+nlp = ["torch>=2.1", "transformers>=4.40"]
+ocr = ["pymupdf>=1.24", "pytesseract>=0.3.13", "pillow>=10.0"]
+dev = ["pytest>=8.0", "ruff>=0.5", "httpx>=0.27"]
+all = ["clauselens[data,dev,ocr]"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+clauselens = ["web/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["notebooks"]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/clauselens/gaps.py" = ["E501"]
+"src/clauselens/explain.py" = ["E501"]
+"src/clauselens/risk.py" = ["E501"]
+"src/clauselens/qa.py" = ["E501"]
+"src/clauselens/hints.py" = ["E501"]
+"src/clauselens/api.py" = ["B008"]
+"scripts/evaluate_components.py" = ["E501"]
+"tests/test_facts.py" = ["E501"]
+"tests/test_gaps_qa_calc_ingest.py" = ["E501"]
+"tests/test_pipeline.py" = ["E501"]
+"tests/test_api.py" = ["E501"]
+"src/clauselens/pipeline.py" = ["E501"]

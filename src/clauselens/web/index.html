@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClauseLens · Agreement explainer</title>
+<style>
+:root{--bg:#0b0f17;--card:#141a26;--card2:#1b2332;--line:#263147;--text:#e6edf7;--mut:#8b9ab3;
+--green:#2ecc71;--amber:#f5a623;--red:#ff5d5d;--accent:#5b8cff;--r:14px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1200px 600px at 10% -10%,#16223d 0,#0b0f17 60%);
+color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:1px solid var(--line);
+position:sticky;top:0;background:#0b0f17ee;backdrop-filter:blur(8px);z-index:5}
+.logo{font-weight:800;font-size:19px;letter-spacing:.3px}.logo b{color:var(--accent)}
+nav{display:flex;gap:6px;margin-left:auto}
+nav button{background:none;border:1px solid transparent;color:var(--mut);padding:7px 14px;border-radius:999px;cursor:pointer;font:inherit}
+nav button.on{color:var(--text);border-color:var(--line);background:var(--card)}
+#banner{margin:14px 22px 0;padding:10px 14px;border:1px solid #3a2f12;background:#2a2410;color:#f3d98b;border-radius:10px;font-size:13px}
+.layout{display:grid;grid-template-columns:250px 1fr;gap:18px;padding:18px 22px;max-width:1280px;margin:0 auto}
+@media(max-width:860px){.layout{grid-template-columns:1fr}}
+aside,.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+aside h3,.card h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--mut)}
+.hist{display:flex;flex-direction:column;gap:6px;max-height:70vh;overflow:auto}
+.hist button{text-align:left;background:var(--card2);border:1px solid var(--line);color:var(--text);padding:8px 10px;border-radius:10px;cursor:pointer;font:inherit}
+.hist button:hover{border-color:var(--accent)}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}
+.dot.green{background:var(--green)}.dot.amber{background:var(--amber)}.dot.red{background:var(--red)}
+textarea{width:100%;min-height:190px;background:#0e1420;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:12px;font:13px/1.5 ui-monospace,Consolas,monospace;resize:vertical}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+button.pri{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:10px 18px;font-weight:600;cursor:pointer}
+button.sec{background:var(--card2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}
+select,input[type=number],input[type=text]{background:#0e1420;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px}
+.grid{display:grid;gap:14px;margin-top:14px}.two{grid-template-columns:1fr 1fr}@media(max-width:860px){.two{grid-template-columns:1fr}}
+.score{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.big{font-size:44px;font-weight:800;line-height:1}.bar{flex:1;min-width:200px;height:12px;background:#0e1420;border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{padding:3px 11px;border-radius:99px;font-size:12px;border:1px solid var(--line);background:var(--card2)}
+.chip.red{color:var(--red);border-color:#5a2a2a}.chip.amber{color:var(--amber);border-color:#5a4520}.chip.green{color:var(--green);border-color:#1f4a35}
+.clause{border:1px solid var(--line);border-left:5px solid var(--line);background:var(--card2);border-radius:12px;padding:12px 14px;margin-top:10px}
+.clause.red{border-left-color:var(--red)}.clause.amber{border-left-color:var(--amber)}.clause.green{border-left-color:var(--green)}
+.clause h4{margin:0 0 4px;font-size:14px}.clause .txt{color:#cfd8e8;font-size:14px}.mut{color:var(--mut);font-size:12.5px}
+.tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:99px;background:#0e1420;border:1px solid var(--line);margin-left:6px;color:var(--mut)}
+ul.flat{margin:6px 0 0 18px;padding:0}.tip{color:#9fd0ff}.reason{color:#ffb4b4}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--mut);font-weight:600}.chat{max-height:300px;overflow:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.msg{padding:9px 12px;border-radius:12px;white-space:pre-wrap;font-size:14px}.msg.u{background:#1d2c52;align-self:flex-end}.msg.b{background:var(--card2);border:1px solid var(--line)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}.filters button{padding:5px 12px;border-radius:99px;border:1px solid var(--line);background:var(--card2);color:var(--mut);cursor:pointer}
+.filters button.on{color:var(--text);border-color:var(--accent)}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#3a1620;color:#ffd0d0;border:1px solid #6a2a35;padding:10px 16px;border-radius:10px;display:none;z-index:9}
+.hidden{display:none!important}details summary{cursor:pointer;color:var(--mut);font-size:13px;margin-top:6px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Clause<b>Lens</b></div>
+  <span class="mut" id="engine">loading…</span>
+  <nav>
+    <button data-view="analyze" class="on">Analyze</button>
+    <button data-view="lab">Model Lab</button>
+    <button data-view="about">About</button>
+  </nav>
+</header>
+<div id="banner">ClauseLens ek awareness tool hai, legal advice nahi. Risk labels heuristics hain; zaroori cheezein kisi advocate se check karwao. Personal IDs (Aadhaar, PAN, phone, email, account) analysis se pehle mask ho jaate hain; naam aur address mask nahi hote.</div>
+<div class="layout">
+  <aside>
+    <h3>History</h3>
+    <div class="hist" id="history"></div>
+    <div class="row"><button class="sec" id="refresh">Refresh</button></div>
+  </aside>
+  <div>
+    <section id="view-analyze">
+      <div class="card">
+        <h3>Agreement</h3>
+        <textarea id="text" placeholder="Rent / Leave &amp; License agreement ya job offer / bond letter ka text yahan paste kar, ya file upload kar (.txt, .docx, .pdf)…"></textarea>
+        <div class="row">
+          <input type="file" id="file" accept=".txt,.md,.docx,.pdf">
+          <select id="lang"><option value="en">English</option><option value="hinglish">Hinglish</option></select>
+          <select id="sample"><option value="rent_agreement">Sample: rent</option><option value="offer_and_bond">Sample: offer + bond</option></select>
+          <button class="sec" id="loadSample">Load sample</button>
+          <label class="mut"><input type="checkbox" id="persist" checked> save in history</label>
+        </div>
+        <div class="row"><button class="pri" id="analyze">Analyze</button><button class="sec" id="clear">Clear</button><span class="mut" id="status"></span></div>
+      </div>
+      <div id="result" class="hidden"></div>
+    </section>
+    <section id="view-lab" class="hidden"><div class="card"><h3>Model Lab</h3><div id="lab">loading…</div></div></section>
+    <section id="view-about" class="hidden"><div class="card">
+      <h3>About</h3>
+      <p>ClauseLens agreement ko clauses mein todta hai, har clause ka type pehchanta hai, key terms nikalta hai, risk (green / amber / red) batata hai, aur plain language mein samjhata hai. Sab kuch deterministic hai: explanations pehle se likhe templates hain, aur numbers seedha clause text se copy hote hain.</p>
+      <p class="mut">Limitations: classifier synthetic + CUAD/LEDGAR data pe train hua hai, isliye real Indian agreements pe accuracy gold set se napni chahiye. Scanned PDFs (OCR) supported nahi. Risk rules ek advocate se validate hone chahiye.</p>
+    </div></section>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const COLORS = {green: "var(--green)", amber: "var(--amber)", red: "var(--red)"};
+let current = null, filter = "all";
+
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.style.display = "block";
+  clearTimeout(toast.h); toast.h = setTimeout(() => (t.style.display = "none"), 4500);
+}
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  let body = null; try { body = await res.json(); } catch (e) { /* not json */ }
+  if (!res.ok) throw new Error((body && (typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail))) || res.statusText);
+  return body;
+}
+function setView(name) {
+  for (const v of ["analyze", "lab", "about"]) $("view-" + v).classList.toggle("hidden", v !== name);
+  document.querySelectorAll("nav button").forEach((b) => b.classList.toggle("on", b.dataset.view === name));
+  if (name === "lab") loadLab();
+}
+document.querySelectorAll("nav button").forEach((b) => b.addEventListener("click", () => setView(b.dataset.view)));
+
+async function loadHealth() {
+  try { const h = await api("/api/health"); $("engine").textContent = h.classifier + " · " + h.runner + " · v" + h.version; }
+  catch (e) { $("engine").textContent = "server not reachable"; }
+}
+async function loadHistory() {
+  const box = $("history");
+  try {
+    const items = await api("/api/reports");
+    box.innerHTML = items.length ? "" : '<span class="mut">Abhi kuch nahi.</span>';
+    for (const it of items) {
+      const b = document.createElement("button");
+      b.innerHTML = '<span class="dot ' + esc(it.overall_risk) + '"></span>' + esc(it.title);
+      b.addEventListener("click", async () => { try { show(await api("/api/reports/" + it.report_id)); } catch (e) { toast(e.message); } });
+      box.appendChild(b);
+    }
+  } catch (e) { box.textContent = e.message; }
+}
+
+async function analyze() {
+  const file = $("file").files[0], text = $("text").value.trim();
+  if (!file && !text) { toast("Pehle text paste kar ya file chun."); return; }
+  $("analyze").disabled = true; $("status").textContent = "Analyzing…";
+  try {
+    let report;
+    if (file) {
+      const fd = new FormData(); fd.append("file", file); fd.append("language", $("lang").value); fd.append("persist", $("persist").checked);
+      report = await api("/api/analyze/file", {method: "POST", body: fd});
+    } else {
+      report = await api("/api/analyze", {method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text, language: $("lang").value, persist: $("persist").checked})});
+    }
+    show(report); loadHistory();
+  } catch (e) { toast(e.message); }
+  finally { $("analyze").disabled = false; $("status").textContent = ""; }
+}
+
+function clauseCard(c) {
+  const risk = c.risk || "", ex = c.explanation;
+  const title = (c.number ? esc(c.number) + " " : "") + esc(c.heading || (c.primary === "other" ? c.kind : c.primary));
+  let h = '<div class="clause ' + esc(risk) + '"><h4>' + title + '<span class="tag">' + esc(c.primary) + "</span>";
+  if (risk) h += '<span class="tag" style="color:' + COLORS[risk] + '">' + esc(ex && ex.risk_label || risk) + "</span>";
+  if (c.needs_review) h += '<span class="tag" style="color:var(--amber)">review</span>';
+  h += '</h4><div class="txt">' + esc(c.text) + "</div>";
+  if (ex) {
+    if (ex.summary) h += '<div class="mut" style="margin-top:6px">' + esc(ex.summary) + "</div>";
+    if (ex.facts_line) h += '<div style="margin-top:6px">' + esc(ex.facts_line) + "</div>";
+    if (ex.reasons.length) h += '<ul class="flat reason">' + ex.reasons.map((r) => "<li>" + esc(r) + "</li>").join("") + "</ul>";
+    if (ex.tips.length) h += '<ul class="flat tip">' + ex.tips.map((r) => "<li>" + esc(r) + "</li>").join("") + "</ul>";
+  }
+  if (c.review_reasons && c.review_reasons.length) h += '<div class="mut" style="margin-top:6px">Check manually: ' + esc(c.review_reasons.join("; ")) + "</div>";
+  h += '<details><summary>details</summary><div class="mut">label source: ' + esc(c.label_source) + " · confidence: " + esc(c.confidence ?? "-") +
+    (c.risk_source ? " · risk source: " + esc(c.risk_source) : "") + "<br>top: " + esc((c.top || []).map((t) => t.label + " " + t.score).join(", ")) + "</div></details></div>";
+  return h;
+}
+function renderClauses() {
+  if (!current) return;
+  const box = $("clauseList");
+  const rows = current.clauses.filter((c) => filter === "all" || (filter === "other" ? !c.risk : c.risk === filter));
+  box.innerHTML = rows.length ? rows.map(clauseCard).join("") : '<span class="mut">Is filter mein kuch nahi.</span>';
+}
+function show(r) {
+  current = r; filter = "all";
+  const s = r.summary, col = COLORS[s.overall_risk] || COLORS.green;
+  let h = '<div class="grid"><div class="card"><div class="score"><div><div class="mut">Risk score</div><div class="big" style="color:' + col + '">' + esc(s.risk_score) + '<span class="mut" style="font-size:18px">/100</span></div></div>' +
+    '<div style="flex:1;min-width:220px"><div class="bar"><i style="width:' + Math.max(3, s.risk_score) + "%;background:" + col + '"></i></div>' +
+    '<div class="chips"><span class="chip">' + esc(r.doc_type.replace(/_/g, " ")) + '</span><span class="chip red">red ' + s.counts.red + '</span><span class="chip amber">amber ' + s.counts.amber +
+    '</span><span class="chip green">green ' + s.counts.green + '</span><span class="chip">' + s.n_segments + ' segments</span>' + (s.n_needs_review ? '<span class="chip amber">' + s.n_needs_review + " to review</span>" : "") +
+    (Object.keys(r.pii_masked || {}).length ? '<span class="chip">masked: ' + esc(Object.entries(r.pii_masked).map(([k, v]) => k + "×" + v).join(", ")) + "</span>" : "") + "</div></div></div>" +
+    '<div class="row"><button class="sec" id="exportJson">Export JSON</button>' + (r.persisted === false ? "" : '<button class="sec" id="delReport">Delete report</button>') + "</div></div>";
+  if (s.red_flags.length) h += '<div class="card"><h3>Red flags</h3><ul class="flat reason">' + s.red_flags.map((f) => "<li>" + esc(f.heading) + " — " + esc(f.flag.replace(/_/g, " ")) + "</li>").join("") + "</ul></div>";
+  if (r.missing.length) h += '<div class="card"><h3>Possibly missing</h3><ul class="flat">' + r.missing.map((m) => "<li><b>" + esc(m.name) + "</b>: " + esc(m.message) + "</li>").join("") + "</ul></div>";
+  if (r.key_facts.length) h += '<div class="card"><h3>Key terms</h3><table><tr><th>Term</th><th>Value</th><th>Clause</th></tr>' + r.key_facts.map((k) => "<tr><td>" + esc(k.role.replace(/_/g, " ")) + "</td><td>" + esc(k.text) + "</td><td>#" + esc(k.clause_index) + "</td></tr>").join("") + "</table></div>";
+  h += '<div class="card"><h3>Clauses</h3><div class="filters" id="filters">' + ["all", "red", "amber", "green", "other"].map((f) => '<button data-f="' + f + '"' + (f === "all" ? ' class="on"' : "") + ">" + f + "</button>").join("") + '</div><div id="clauseList"></div></div>';
+  h += '<div class="grid two"><div class="card"><h3>Ask your contract</h3><div class="chat" id="chat"></div><div class="row"><input type="text" id="q" style="flex:1" placeholder="e.g. Deposit kab wapas milega? / What is the notice period?"><button class="pri" id="askBtn">Ask</button></div></div>' +
+    '<div class="card" id="bondCard"><h3>Bond cost calculator</h3><div class="row"><label class="mut">Bond amount <input type="number" id="bAmt" min="0"></label><label class="mut">Bond months <input type="number" id="bMon" min="1"></label><label class="mut">Months served <input type="number" id="bSrv" min="0" value="0"></label>' +
+    '<select id="bMode"><option value="pro_rata">pro-rata</option><option value="full">full amount</option></select><button class="sec" id="bGo">Calculate</button></div><div id="bOut" style="margin-top:10px"></div></div></div>';
+  h += '<p class="mut">' + esc(r.disclaimer) + "</p></div>";
+  const box = $("result"); box.innerHTML = h; box.classList.remove("hidden");
+  renderClauses();
+  $("filters").addEventListener("click", (e) => { const f = e.target.dataset.f; if (!f) return; filter = f; document.querySelectorAll("#filters button").forEach((b) => b.classList.toggle("on", b.dataset.f === f)); renderClauses(); });
+  $("exportJson").addEventListener("click", () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(r, null, 2)], {type: "application/json"})); a.download = "clauselens-" + r.report_id + ".json"; a.click(); });
+  const del = $("delReport"); if (del) del.addEventListener("click", async () => { try { await api("/api/reports/" + r.report_id, {method: "DELETE"}); box.classList.add("hidden"); current = null; loadHistory(); } catch (e) { toast(e.message); } });
+  $("askBtn").addEventListener("click", ask); $("q").addEventListener("keydown", (e) => { if (e.key === "Enter") ask(); });
+  setupBond();
+  window.scrollTo({top: box.offsetTop - 80, behavior: "smooth"});
+}
+function num(text) { const m = /\((\d+)\)/.exec(text) || /(\d[\d,]*(?:\.\d+)?)/.exec(text); return m ? parseFloat(m[1].replace(/,/g, "")) : null; }
+function setupBond() {
+  const facts = current.key_facts, amt = facts.find((f) => f.role === "bond_amount"), per = facts.find((f) => f.role === "bond_period");
+  const flags = current.clauses.flatMap((c) => c.flags.map((f) => f.flag));
+  $("bondCard").classList.toggle("hidden", !amt && !per);
+  if (amt) $("bAmt").value = num(amt.text) ?? "";
+  if (per) $("bMon").value = num(per.text) ?? "";
+  $("bMode").value = flags.includes("full_amount_regardless") ? "full" : "pro_rata";
+  $("bGo").addEventListener("click", async () => {
+    try {
+      const r = await api("/api/calc/bond", {method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({bond_amount: +$("bAmt").value, bond_months: +$("bMon").value, months_served: +$("bSrv").value, mode: $("bMode").value})});
+      $("bOut").textContent = "Payable if you leave now: Rs. " + r.payable.toLocaleString("en-IN") + " (" + r.remaining_months + " months of bond left, " + r.mode.replace("_", "-") + ")";
+    } catch (e) { toast(e.message); }
+  });
+}
+async function ask() {
+  const q = $("q").value.trim(); if (!q || !current) return;
+  const chat = $("chat"); const u = document.createElement("div"); u.className = "msg u"; u.textContent = q; chat.appendChild(u); $("q").value = "";
+  try {
+    const r = await api("/api/ask", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({question: q, language: $("lang").value, clauses: current.clauses})});
+    const b = document.createElement("div"); b.className = "msg b"; b.textContent = r.answer; chat.appendChild(b); chat.scrollTop = chat.scrollHeight;
+  } catch (e) { toast(e.message); }
+}
+function table(rows, head) { return "<table><tr>" + head.map((x) => "<th>" + esc(x) + "</th>").join("") + "</tr>" + rows.map((r) => "<tr>" + r.map((x) => "<td>" + esc(x) + "</td>").join("") + "</tr>").join("") + "</table>"; }
+async function loadLab() {
+  const box = $("lab");
+  try {
+    const m = await api("/api/metrics"); let h = "";
+    if (m.baselines_v1) {
+      const sets = Object.keys(Object.values(m.baselines_v1.models)[0]);
+      h += "<h4>TF-IDF baselines (micro / macro F1)</h4>" + table(Object.entries(m.baselines_v1.models).map(([n, v]) => [n, ...sets.map((s) => v[s].micro_f1.toFixed(3) + " / " + v[s].macro_f1.toFixed(3))]), ["model", ...sets]);
+    }
+    const c = m.components;
+    if (c) {
+      h += "<h4>Component checks (synthetic data; not a real-world estimate)</h4>";
+      if (c.facts) h += table(Object.entries(c.facts.per_type).map(([k, v]) => [k, v.precision, v.recall, v.f1]), ["fact type", "precision", "recall", "F1"]) + '<p class="mut">role accuracy: ' + esc(c.facts.role_accuracy) + "</p>";
+      if (c.risk) h += table(Object.entries(c.risk).map(([k, v]) => [k, v.accuracy, v.macro_f1, v.red_recall]), ["risk layer (held-out phrasing)", "accuracy", "macro F1", "red recall"]);
+      if (c.pipeline) h += table(Object.entries(c.pipeline).filter(([k, v]) => typeof v !== "object").map(([k, v]) => [k.replace(/_/g, " "), v]), ["pipeline (60 synthetic docs)", "value"]);
+    }
+    box.innerHTML = h || '<span class="mut">Abhi koi report nahi. <code>python scripts/run_all.py</code> chala.</span>';
+  } catch (e) { box.textContent = e.message; }
+}
+$("analyze").addEventListener("click", analyze);
+$("clear").addEventListener("click", () => { $("text").value = ""; $("file").value = ""; $("result").classList.add("hidden"); current = null; });
+$("refresh").addEventListener("click", loadHistory);
+$("loadSample").addEventListener("click", async () => { try { $("text").value = (await api("/api/sample?doc_type=" + $("sample").value)).text; $("file").value = ""; } catch (e) { toast(e.message); } });
+loadHealth(); loadHistory();
+</script>
+</body>
+</html>

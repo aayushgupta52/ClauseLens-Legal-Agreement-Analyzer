@@ -1,0 +1,310 @@
+# ClauseLens clause taxonomy v1.
+# - `applies_to`: "common" or a doc type from configs/scope.yaml
+# - `map`: source label -> clause id. Labels are EXACT strings from the source datasets.
+#   A source label may map to exactly one clause. Mappings marked (weak) are generic.
+# - Clauses with no `map` have no public labeled data; Phase 2 covers them with
+#   synthetic + hand-labeled data.
+version: 1
+
+clauses:
+  # ---------- common ----------
+  - id: termination
+    name: Termination
+    applies_to: [common]
+    description: Who can end the agreement, when, and on what conditions.
+    map:
+      cuad: ["Termination For Convenience"]
+      ledgar: ["Terminations"]
+
+  - id: term_and_renewal
+    name: Term and renewal
+    applies_to: [common]
+    description: Duration of the agreement, renewal terms and renewal notice.
+    map:
+      cuad: ["Renewal Term", "Notice Period To Terminate Renewal"]
+
+  - id: payment_terms
+    name: Payment terms
+    applies_to: [common]
+    description: Amounts, due dates and mode of payment (rent, stipend, fees).
+    map:
+      ledgar: ["Payments"]  # (weak) generic
+
+  - id: assignment
+    name: Assignment
+    applies_to: [common]
+    description: Whether a party can transfer its rights or obligations to someone else.
+    map:
+      cuad: ["Anti-Assignment"]
+      ledgar: ["Assignments", "Assigns"]
+
+  - id: penalty_liquidated_damages
+    name: Penalty / liquidated damages
+    applies_to: [common]
+    description: Pre-agreed amounts payable on breach or early exit.
+    map:
+      cuad: ["Liquidated Damages"]
+
+  - id: liability_limitation
+    name: Limitation of liability
+    applies_to: [common]
+    description: Caps on, or absence of caps on, what a party can be liable for.
+    map:
+      cuad: ["Cap On Liability", "Uncapped Liability"]
+
+  - id: indemnity
+    name: Indemnity
+    applies_to: [common]
+    description: One party agreeing to cover losses or claims of the other.
+    map:
+      ledgar: ["Indemnity", "Indemnifications"]
+
+  - id: confidentiality
+    name: Confidentiality
+    applies_to: [common]
+    description: Duty to keep information secret.
+    map:
+      ledgar: ["Confidentiality"]
+
+  - id: governing_law
+    name: Governing law
+    applies_to: [common]
+    description: Which law governs the agreement.
+    map:
+      cuad: ["Governing Law"]
+      ledgar: ["Governing Laws"]
+
+  - id: dispute_resolution
+    name: Dispute resolution
+    applies_to: [common]
+    description: Arbitration, courts, venue and jurisdiction for disputes.
+    map:
+      ledgar: ["Arbitration", "Jurisdictions", "Venues", "Consent To Jurisdiction",
+               "Submission To Jurisdiction"]
+
+  - id: notices
+    name: Notices
+    applies_to: [common]
+    description: How formal notices must be delivered.
+    map:
+      ledgar: ["Notices"]
+
+  - id: amendment
+    name: Amendment
+    applies_to: [common]
+    description: How the agreement can be changed.
+    map:
+      ledgar: ["Amendments", "Modifications"]
+
+  - id: entire_agreement
+    name: Entire agreement
+    applies_to: [common]
+    description: The written agreement replaces all earlier understandings.
+    map:
+      ledgar: ["Entire Agreements"]
+
+  - id: severability
+    name: Severability
+    applies_to: [common]
+    description: If one clause is invalid the rest continues.
+    map:
+      ledgar: ["Severability"]
+
+  - id: waiver
+    name: Waiver
+    applies_to: [common]
+    description: Not enforcing a right once does not give it up.
+    map:
+      ledgar: ["Waivers", "No Waivers"]
+
+  # ---------- rent_agreement ----------
+  - id: security_deposit
+    name: Security deposit
+    applies_to: [rent_agreement]
+    description: Deposit amount, deductions and refund conditions and timeline.
+
+  - id: lock_in_period
+    name: Lock-in period
+    applies_to: [rent_agreement]
+    description: Minimum period during which neither side may exit, and exit penalties.
+
+  - id: rent_escalation
+    name: Rent escalation
+    applies_to: [rent_agreement]
+    description: How and when rent increases.
+
+  - id: maintenance_repairs
+    name: Maintenance and repairs
+    applies_to: [rent_agreement]
+    description: Who pays for and performs maintenance and repairs.
+
+  - id: utilities_and_charges
+    name: Utilities and charges
+    applies_to: [rent_agreement]
+    description: Electricity, water, society and other recurring charges.
+
+  - id: owner_entry_inspection
+    name: Owner entry and inspection
+    applies_to: [rent_agreement]
+    description: When the owner may enter the premises.
+
+  - id: subletting_guests
+    name: Subletting and guests
+    applies_to: [rent_agreement]
+    description: Restrictions on subletting, sharing or hosting guests.
+
+  - id: eviction_default
+    name: Eviction and default
+    applies_to: [rent_agreement]
+    description: Grounds and process for eviction or default consequences.
+
+  - id: tenant_verification
+    name: Tenant verification
+    applies_to: [rent_agreement]
+    description: Police or document verification obligations.
+
+  - id: handover_inventory
+    name: Handover and inventory
+    applies_to: [rent_agreement]
+    description: Condition of premises, inventory list and handover at exit.
+
+  # ---------- offer_and_bond ----------
+  - id: service_bond
+    name: Service bond
+    applies_to: [offer_and_bond]
+    description: Minimum service period and what is payable if it is not completed.
+
+  - id: training_cost_recovery
+    name: Training cost recovery
+    applies_to: [offer_and_bond]
+    description: Employer recovering training or onboarding costs.
+
+  - id: notice_period
+    name: Notice period
+    applies_to: [offer_and_bond]
+    description: Notice required to resign or be terminated, and whether it is mutual.
+
+  - id: document_retention
+    name: Original document retention
+    applies_to: [offer_and_bond]
+    description: Employer holding original certificates or documents.
+
+  - id: salary_deductions
+    name: Salary / stipend deductions
+    applies_to: [offer_and_bond]
+    description: Deductions or recoveries from pay or stipend.
+
+  - id: compensation
+    name: Compensation
+    applies_to: [offer_and_bond]
+    description: Salary, stipend and pay structure.
+    map:
+      ledgar: ["Base Salary"]
+
+  - id: benefits_leave
+    name: Benefits and leave
+    applies_to: [offer_and_bond]
+    description: Benefits, vacation and leave entitlements.
+    map:
+      ledgar: ["Benefits", "Vacations"]
+
+  - id: non_compete
+    name: Non-compete
+    applies_to: [offer_and_bond]
+    description: Restrictions on working for competitors.
+    map:
+      cuad: ["Non-Compete"]
+
+  - id: non_solicit
+    name: Non-solicit
+    applies_to: [offer_and_bond]
+    description: Restrictions on soliciting employees or customers.
+    map:
+      cuad: ["No-Solicit Of Employees", "No-Solicit Of Customers"]
+
+  - id: non_disparagement
+    name: Non-disparagement
+    applies_to: [offer_and_bond]
+    description: Restrictions on negative statements about the other party.
+    map:
+      cuad: ["Non-Disparagement"]
+      ledgar: ["Non-Disparagement"]
+
+  - id: intellectual_property
+    name: Intellectual property
+    applies_to: [offer_and_bond]
+    description: Ownership and assignment of work product and inventions.
+    map:
+      cuad: ["Ip Ownership Assignment"]
+      ledgar: ["Intellectual Property"]
+
+# Source labels that are intentionally NOT clause classes.
+# Every CUAD category must appear either in `map` above or here (checked at build time).
+# LEDGAR labels not listed anywhere are reported as "unmapped" in stats.json.
+excluded:
+  cuad:
+    metadata_fact:  # handled later as extracted facts (NER), not clause types
+      - Document Name
+      - Parties
+      - Agreement Date
+      - Effective Date
+      - Expiration Date
+    out_of_domain:  # commercial / licensing terms with no counterpart in rent or offer docs
+      - Affiliate License-Licensee
+      - Affiliate License-Licensor
+      - Audit Rights
+      - Change Of Control
+      - Competitive Restriction Exception
+      - Covenant Not To Sue
+      - Exclusivity
+      - Insurance
+      - Irrevocable Or Perpetual License
+      - Joint Ip Ownership
+      - License Grant
+      - Minimum Commitment
+      - Most Favored Nation
+      - Non-Transferable License
+      - Post-Termination Services
+      - Price Restrictions
+      - Revenue/Profit Sharing
+      - Rofr/Rofo/Rofn
+      - Source Code Escrow
+      - Third Party Beneficiary
+      - Unlimited/All-You-Can-Eat-License
+      - Volume Restriction
+      - Warranty Duration
+  ledgar:
+    out_of_domain:  # clearly unrelated corporate / finance topics -> safe "other" examples
+      - Anti-Corruption Laws
+      - Brokers
+      - Capitalization
+      - Closings
+      - Compliance With Laws
+      - Construction
+      - Counterparts
+      - Defined Terms
+      - Definitions
+      - Erisa
+      - Existence
+      - Financial Statements
+      - Further Assurances
+      - Headings
+      - Insurances
+      - Interpretations
+      - Liens
+      - No Conflicts
+      - No Defaults
+      - Organizations
+      - Participations
+      - Publicity
+      - Qualifications
+      - Representations
+      - Sales
+      - Sanctions
+      - Solvency
+      - Subsidiaries
+      - Survival
+      - Titles
+      - Transactions With Affiliates
+      - Use Of Proceeds
+      - Warranties

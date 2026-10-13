@@ -1,0 +1,8 @@
+services:
+  clauselens-translation:
+    image: libretranslate/libretranslate:latest
+    container_name: clauselens-translation
+    restart: unless-stopped
+    ports:
+      # Bind only to loopback; legal document text is not exposed to the LAN.
+      - "127.0.0.1:5000:5000"

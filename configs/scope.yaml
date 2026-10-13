@@ -1,0 +1,19 @@
+# Scope freeze for ClauseLens. Change this file deliberately, not casually.
+project: clauselens
+scope_version: 1
+
+doc_types:
+  rent_agreement:
+    description: House / flat / PG rent agreements, including Maharashtra-style Leave and License.
+  offer_and_bond:
+    description: Job and internship offer letters, including service / training bonds.
+
+languages:
+  input: [en]
+  explanation: [en, hinglish, hi]
+
+out_of_scope:
+  - loan agreements (home / car / personal)
+  - terms of service and privacy policies
+  - scanned documents and photos (OCR is a stretch goal)
+  - giving legal advice (this is an awareness tool)
