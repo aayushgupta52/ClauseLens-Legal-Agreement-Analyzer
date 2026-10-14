@@ -5,6 +5,7 @@ const HindiContext = createContext("en");
 // Keep UI chrome translations deterministic and offline. Agreement wording and generated
 // explanations are translated by the backend translation service, not by this static dictionary.
 const HI = {
+  'Home purchase agreement': 'घर खरीद समझौता',
   Dashboard: "डैशबोर्ड",
   "Analyze agreement": "समझौते का विश्लेषण",
   "Analyze an agreement": "समझौते का विश्लेषण करें",

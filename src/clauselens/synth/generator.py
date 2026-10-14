@@ -33,6 +33,10 @@ ROLE_SETS: dict[str, list[dict[str, str]]] = {
         {"employer": "Employer", "employee": "Intern"},
         {"employer": "Organisation", "employee": "Trainee"},
     ],
+    "property_purchase": [
+        {"owner": "Seller", "tenant": "Buyer"},
+        {"owner": "Promoter", "tenant": "Purchaser"},
+    ],
 }
 ROLE_SLOTS = frozenset({"owner", "tenant", "employer", "employee"})
 _NAME_SLOTS = ("owner_name", "tenant_name", "employee_name")
@@ -329,8 +333,10 @@ def assemble_document(
     ctx = _new_ctx(doc_type, rng)
     if doc_type == "rent_agreement":
         title = "LEAVE AND LICENSE AGREEMENT" if ctx["owner"] == "Licensor" else "RENT AGREEMENT"
-    else:
+    elif doc_type == "offer_and_bond":
         title = "INTERNSHIP OFFER LETTER" if ctx["employee"] == "Intern" else "OFFER OF EMPLOYMENT"
+    else:
+        title = "AGREEMENT FOR SALE / PROPERTY PURCHASE AGREEMENT"
 
     preamble, _ = render(FILLERS[f"preamble_{doc_type}"][pool], rng, ctx)
     items: list[dict] = [{"kind": "preamble", "clause_id": None, "risk": None, "text": preamble}]
@@ -353,8 +359,10 @@ def assemble_document(
     if doc_type == "rent_agreement":
         sign = (f"{ctx['owner']}: ____________    {ctx['tenant']}: ____________\n\n"
                 "Witnesses:\n1. ____________\n2. ____________")  # fmt: skip
-    else:
+    elif doc_type == "offer_and_bond":
         sign = f"{ctx['employee']}: ____________\nDate: ____________"
+    else:
+        sign = "SELLER: ____________    BUYER: ____________\nWitnesses: ____________"
     trailer = f"{closing}\n\n{sign}"
     items.append({"kind": "trailer", "clause_id": None, "risk": None, "text": trailer})
 

@@ -83,6 +83,6 @@ def test_trained_engine_scores_synthetic_clauses(engine):
 
 
 def test_scope_and_score():
-    assert len(RISK_CLAUSES) == 15
+    assert len(RISK_CLAUSES) == 21
     assert overall_score([]) == 0 and overall_score(["green", "green"]) == 0
     assert overall_score(["red", "red"]) == 100 and overall_score(["green", "red"]) == 50

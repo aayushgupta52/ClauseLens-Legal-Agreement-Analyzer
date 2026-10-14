@@ -36,6 +36,9 @@ PATTERNS: dict[str, re.Pattern[str]] = {
 # (pattern searched in the text BEFORE the value, role). The closest match wins.
 ROLE_RULES: dict[str, list[tuple[str, str]]] = {
     "money": [
+        (r"stamp duty|registration fee|registration charges", "registration_charge"),
+        (r"booking amount|earnest money", "booking_amount"),
+        (r"purchase price|sale consideration|purchase consideration|consideration", "purchase_price"),
         (r"deposit", "deposit_amount"),
         (r"\brent\b", "monthly_rent"),
         (r"society|maintenance of|maintenance charge|charges of", "maintenance_charge"),
@@ -67,6 +70,8 @@ ROLE_RULES: dict[str, list[tuple[str, str]]] = {
 }
 # In these clauses the role follows from the clause type itself (checked before the keywords).
 CLAUSE_ROLE: dict[tuple[str, str], str] = {
+    ("registration_charges", "money"): "registration_charge",
+    ("cancellation_refund", "money"): "booking_amount",
     ("security_deposit", "money"): "deposit_amount",
     ("security_deposit", "duration"): "refund_window",
     ("rent_escalation", "money"): "monthly_rent",

@@ -118,8 +118,12 @@ def test_bond_calculator_and_sample(client):
         ).status_code
         == 422
     )
-    for doc_type in ("rent_agreement", "offer_and_bond"):
-        assert len(client.get(f"/api/sample?doc_type={doc_type}").json()["text"]) > 500
+    for doc_type in ("rent_agreement", "offer_and_bond", "property_purchase"):
+        sample = client.get(f"/api/sample?doc_type={doc_type}").json()
+        assert len(sample["text"]) > 500
+        assert sample["doc_type"] == doc_type
+    property_sample = client.get("/api/sample?doc_type=property_purchase").json()["text"]
+    assert "PROPERTY SPECIFICATIONS" in property_sample and "TITLE AND ENCUMBRANCES" in property_sample
     assert client.get("/api/sample?doc_type=loan").status_code == 422
 
 

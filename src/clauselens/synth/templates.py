@@ -348,6 +348,80 @@ _c(
     ("uncapped", "withholding_final_dues"),
 )
 
+# ------------------------------------------------------------------ property_purchase
+_c(
+    "property_specifications", "property_purchase", "PROPERTY SPECIFICATIONS",
+    ("The property specifications, including carpet area, layout, fixtures and common facilities, are recorded in this agreement.",
+     "The agreed carpet area, layout, fixtures, parking allocation and amenities are part of the property specifications."),
+    ("The seller shall not materially change the layout, carpet area or facilities without the buyer's prior written consent.",
+     "Any material change to the agreed specifications requires written consent from the buyer."),
+    ("The seller may make reasonable changes to specifications where required, and will notify the buyer in writing.",
+     "The seller may adjust non-material specifications and shall notify the buyer of the change."),
+    ("The seller may change the layout, fixtures, carpet area, parking allocation or facilities without prior written consent, and no price reduction or cancellation is available.",
+     "The promoter may alter the carpet area or common facilities without written buyer consent, with no compensation or cancellation right."),
+    ("unilateral_change",), ("seller_specification_change",),
+)
+_c(
+    "title_and_encumbrances", "property_purchase", "TITLE AND ENCUMBRANCES",
+    ("The seller represents that it has the right to transfer the property and will disclose any encumbrances in writing.",
+     "The seller shall provide title documents and disclose any lien or claim affecting the property."),
+    ("The seller shall provide available title documents and disclose any known encumbrance before completion.",
+     "Title documents and known encumbrances shall be shared with the buyer before completion."),
+    ("The buyer must rely on the documents provided and the seller gives no express assurance about third-party claims.",
+     "The seller makes limited representations about title and does not undertake to resolve undisclosed claims."),
+    ("The seller gives no assurance of clear title and is not responsible for undisclosed liens or ownership claims.",
+     "The buyer accepts the property even if a prior lien or third-party ownership claim is discovered."),
+    ("unclear_title",), ("unclear_title",),
+)
+_c(
+    "possession_handover", "property_purchase", "POSSESSION AND HANDOVER",
+    ("The agreement shall state the possession date and the conditions required before handover.",
+     "Possession shall be handed over on the written date after the agreed completion conditions are met."),
+    ("The seller shall hand over possession by the agreed date, subject to documented lawful extensions.",
+     "The buyer may seek the remedies stated in the agreement if possession is delayed beyond the agreed date."),
+    ("The possession date may be extended for reasons determined by the seller, with limited remedies for delay.",
+     "The seller may extend the handover date and the agreement does not clearly state compensation for delay."),
+    ("The seller may delay possession indefinitely without compensation, refund or cancellation rights for the buyer.",
+     "No fixed handover date applies and the buyer waives claims arising from possession delay."),
+    ("possession_delay",), ("possession_delay",),
+)
+_c(
+    "booking_payment", "property_purchase", "BOOKING AND PURCHASE PAYMENTS",
+    ("The purchase price, booking amount, instalment dates and payment milestones shall be recorded in writing.",
+     "The buyer shall pay the stated consideration according to the schedule set out in this agreement."),
+    ("Payments are due at stated milestones and the seller shall issue receipts for amounts received.",
+     "Each payment milestone and receipt should be documented before payment is made."),
+    ("The agreement permits additional charges that are not fully itemised in the payment schedule.",
+     "The seller may request additional charges where the agreement does not specify a clear calculation."),
+    ("The seller may determine additional payment amounts without an itemised basis or written buyer approval.",
+     "Additional amounts are payable at the seller's discretion without a stated limit or calculation method."),
+    ("unitemised_charges",), ("undefined_amount",),
+)
+_c(
+    "cancellation_refund", "property_purchase", "CANCELLATION AND REFUND",
+    ("The agreement shall state when either party may cancel and how paid amounts are refunded.",
+     "Cancellation conditions, deductions and refund timelines shall be recorded in writing."),
+    ("Cancellation deductions shall be itemised and the balance refunded within the stated timeline.",
+     "The seller shall identify permitted deductions and refund the balance within the agreed period."),
+    ("The seller may deduct administrative costs from the booking amount and the refund timeline is not fixed.",
+     "Cancellation may result in deductions that are not fully itemised in the agreement."),
+    ("The entire booking amount is non-refundable on cancellation regardless of the reason or seller breach.",
+     "All amounts paid may be forfeited even when the seller fails to meet its obligations."),
+    ("forfeiture",), ("booking_forfeiture",),
+)
+_c(
+    "registration_charges", "property_purchase", "REGISTRATION AND TRANSACTION CHARGES",
+    ("The agreement shall identify who pays stamp duty, registration fees, taxes and transaction charges.",
+     "Stamp duty, registration fees and applicable taxes shall be allocated between the parties in writing."),
+    ("The buyer shall pay the listed registration charges against official receipts.",
+     "Only listed statutory and transaction charges shall be payable by the buyer."),
+    ("Some additional registration-related charges may be payable but are not fully itemised.",
+     "The agreement does not clearly itemise all transaction-related charges."),
+    ("The buyer must pay any charges later demanded by the seller without itemised bills or a stated cap.",
+     "All future charges are payable on demand, without a right to inspect supporting bills."),
+    ("unitemised_charges",), ("unitemised_charges",),
+)
+
 # Clause order inside a generated document.
 ORDER: dict[str, list[str]] = {
     "rent_agreement": [
@@ -358,6 +432,10 @@ ORDER: dict[str, list[str]] = {
     "offer_and_bond": [
         "service_bond", "training_cost_recovery", "notice_period", "document_retention",
         "salary_deductions",
+    ],
+    "property_purchase": [
+        "property_specifications", "title_and_encumbrances", "possession_handover",
+        "booking_payment", "cancellation_refund", "registration_charges",
     ],
 }
 
@@ -411,6 +489,14 @@ FILLERS: dict[str, Pair] = {
     "trailer_offer_and_bond": (
         "Accepted and agreed by the {employee} on the date written below.",
         "ACCEPTED: I have read and understood the above terms and agree to them.",
+    ),
+    "preamble_property_purchase": (
+        "AGREEMENT FOR SALE made at {city} on {day} {month} {year} between the Seller and the Buyer for purchase of a residential flat.",
+        "This Property Purchase Agreement records the sale of the residential flat by the Seller to the Purchaser at {city}.",
+    ),
+    "trailer_property_purchase": (
+        "The parties confirm that they have read this agreement and signed it voluntarily.",
+        "IN WITNESS WHEREOF the Seller and Buyer have signed this agreement on the date stated above.",
     ),
 }
 # fmt: on

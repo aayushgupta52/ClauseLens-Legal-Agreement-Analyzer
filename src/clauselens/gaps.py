@@ -8,6 +8,10 @@ _RENT = ("tenant", "tenancy", "licensee", "licensor", "landlord", "rent", "premi
          "lock-in", "security deposit", "leave and license", "vacat")  # fmt: skip
 _OFFER = ("employee", "employer", "salary", "stipend", "intern", "trainee", "designation",
           "bond", "notice period", "offer", "appointment", "probation", "training")  # fmt: skip
+_PROPERTY = ("agreement for sale", "agreement to sell", "sale deed", "purchaser", "allottee",
+             "carpet area", "possession date", "booking amount", "purchase consideration",
+             "stamp duty", "registration charges", "encumbrance", "builder", "promoter",
+             "property specifications", "flat purchase", "buyer", "seller")  # fmt: skip
 
 # Clause types a good agreement of this kind should state clearly.
 EXPECTED: dict[str, list[str]] = {
@@ -17,6 +21,8 @@ EXPECTED: dict[str, list[str]] = {
         "handover_inventory",
     ],
     "offer_and_bond": ["notice_period", "compensation", "termination"],
+    "property_purchase": ["property_specifications", "title_and_encumbrances", "possession_handover",
+                          "booking_payment", "cancellation_refund", "registration_charges"],
 }  # fmt: skip
 
 GAP_TEXT: dict[str, tuple[str, str]] = {
@@ -60,6 +66,30 @@ GAP_TEXT: dict[str, tuple[str, str]] = {
         "No compensation clause found. Pay, stipend and payment dates should be stated.",
         "Compensation ka clause nahi mila. Salary/stipend aur payment dates likhi honi chahiye.",
     ),
+    "property_specifications": (
+        "No clear property-specification clause was identified. Confirm carpet area, layout, fixtures, amenities and whether changes require written buyer consent.",
+        "Property specifications ka clear clause nahi mila. Carpet area, layout, fixtures, amenities aur changes ke liye buyer ki written consent check karo.",
+    ),
+    "title_and_encumbrances": (
+        "No clear title/encumbrance clause was identified. Ask for title documents and written disclosure of liens or claims; verify independently.",
+        "Title/encumbrance ka clear clause nahi mila. Title documents aur kisi lien/claim ka written disclosure maango; independently verify karao.",
+    ),
+    "possession_handover": (
+        "No clear possession/handover clause was identified. Confirm the date, completion conditions, delay consequences and remedies.",
+        "Possession/handover ka clear clause nahi mila. Date, completion conditions, delay par consequences aur remedies confirm karo.",
+    ),
+    "booking_payment": (
+        "No clear booking/payment schedule was identified. Confirm amounts, due dates, milestones and receipt requirements.",
+        "Booking/payment schedule clear nahi mila. Amount, due dates, milestones aur receipts confirm karo.",
+    ),
+    "cancellation_refund": (
+        "No clear cancellation/refund clause was identified. Confirm when money can be retained and the refund timeline.",
+        "Cancellation/refund clause clear nahi mila. Paisa kab roka ja sakta hai aur refund timeline confirm karo.",
+    ),
+    "registration_charges": (
+        "No clear allocation of stamp duty, registration fees and transaction charges was identified. Confirm who pays each item.",
+        "Stamp duty, registration fees aur transaction charges ka allocation clear nahi mila. Har charge ka payer confirm karo.",
+    ),
     "termination": (
         "No termination clause found. Ask how either side can end the agreement.",
         "Termination ka clause nahi mila. Poochho ki dono taraf se agreement kaise khatam ho sakta hai.",
@@ -68,15 +98,29 @@ GAP_TEXT: dict[str, tuple[str, str]] = {
 
 
 def detect_doc_type(text: str) -> tuple[str, float]:
-    """('rent_agreement' | 'offer_and_bond' | 'unknown', confidence in 0-1)."""
+    """Return rent, employment, property-purchase or unknown plus keyword confidence.
+
+    This is a triage heuristic, not a trained document classifier. Property-specific evidence
+    is scored separately because buyer/seller words alone also occur in unrelated documents.
+    """
     low = text.lower()
-    rent = sum(len(re.findall(re.escape(w), low)) for w in _RENT)
-    offer = sum(len(re.findall(re.escape(w), low)) for w in _OFFER)
-    total = rent + offer
-    if total < 3 or rent == offer:
+    counts = {
+        "rent_agreement": sum(len(re.findall(re.escape(w), low)) for w in _RENT),
+        "offer_and_bond": sum(len(re.findall(re.escape(w), low)) for w in _OFFER),
+        "property_purchase": sum(len(re.findall(re.escape(w), low)) for w in _PROPERTY),
+    }
+    # Avoid letting generic words such as "buyer" or "seller" classify a document alone.
+    property_specific = sum(
+        len(re.findall(re.escape(w), low)) for w in _PROPERTY
+        if w not in {"buyer", "seller", "builder"}
+    )
+    if property_specific < 2:
+        counts["property_purchase"] = 0
+    winner, score = max(counts.items(), key=lambda item: item[1])
+    total = sum(counts.values())
+    if score < 3 or list(counts.values()).count(score) > 1 or total == 0:
         return "unknown", 0.0
-    winner = "rent_agreement" if rent > offer else "offer_and_bond"
-    return winner, round(max(rent, offer) / total, 3)
+    return winner, round(score / total, 3)
 
 
 def find_gaps(doc_type: str, present: set[str], predictable: set[str]) -> list[str]:

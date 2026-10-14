@@ -75,6 +75,14 @@ RULES: list[Rule] = [
         "red",
         r"from time to time, without prior consent|as decided by the " + _PARTY,
     ),  # fmt: skip
+    _r("seller_specification_change", "red",
+       r"(?:seller|promoter|builder)[^.]{0,240}(?:change|alter|modify)[^.]{0,240}without prior (?:written )?consent|(?:change|alter|modify)[^.]{0,160}(?:carpet area|property specifications|parking allocation|common facilities)[^.]{0,120}without prior (?:written )?consent"),
+    _r("unclear_title", "red",
+       r"no assurance of clear title|not responsible for undisclosed liens|accepts the property even if[^.]{0,100}(?:lien|ownership claim|encumbrance)"),
+    _r("possession_delay", "red",
+       r"possession[^.]{0,100}(?:indefinitely|without compensation)|waives claims arising from possession delay|no fixed handover date"),
+    _r("booking_forfeiture", "red",
+       r"(?:entire|all) (?:booking amount|amounts paid)[^.]{0,100}(?:non-refundable|forfeit|forfeited)|forfeit(?:ure|ed)?[^.]{0,100}(?:booking amount|amounts paid)"),
     _r("entry_without_notice", "red", r"without prior intimation|at all hours"),
     _r(
         "no_inventory",

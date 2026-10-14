@@ -18,6 +18,7 @@ def _strip(report):
 
 
 def test_langgraph_and_sequential_runners_agree(engine):
+    pytest.importorskip("langgraph.graph")
     graph = build_graph(engine)
     for doc in DOCS[:2]:
         state = {"text": doc["text"], "language": "en"}

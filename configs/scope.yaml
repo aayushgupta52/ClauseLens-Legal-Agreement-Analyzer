@@ -7,6 +7,8 @@ doc_types:
     description: House / flat / PG rent agreements, including Maharashtra-style Leave and License.
   offer_and_bond:
     description: Job and internship offer letters, including service / training bonds.
+  property_purchase:
+    description: Agreements for sale or purchase of residential property, including builder/promoter agreements.
 
 languages:
   input: [en]
@@ -14,6 +16,7 @@ languages:
 
 out_of_scope:
   - loan agreements (home / car / personal)
+  - standalone conveyance / title verification without a purchase agreement
   - terms of service and privacy policies
   - scanned documents and photos (OCR is a stretch goal)
   - giving legal advice (this is an awareness tool)

@@ -238,6 +238,37 @@ clauses:
       cuad: ["Ip Ownership Assignment"]
       ledgar: ["Intellectual Property"]
 
+  # ---------- property_purchase ----------
+  - id: property_specifications
+    name: Property specifications and changes
+    applies_to: [property_purchase]
+    description: Carpet area, layout, fixtures, amenities and changes the seller or builder may make.
+
+  - id: title_and_encumbrances
+    name: Title and encumbrances
+    applies_to: [property_purchase]
+    description: Seller's title, ownership, liens, encumbrances and ability to transfer clear title.
+
+  - id: possession_handover
+    name: Possession and handover
+    applies_to: [property_purchase]
+    description: Possession date, completion, handover conditions and delay consequences.
+
+  - id: booking_payment
+    name: Booking and purchase payments
+    applies_to: [property_purchase]
+    description: Booking amount, purchase consideration, instalments and payment milestones.
+
+  - id: cancellation_refund
+    name: Cancellation and refund
+    applies_to: [property_purchase]
+    description: Cancellation rights, refund conditions, deductions and forfeiture of buyer payments.
+
+  - id: registration_charges
+    name: Registration, stamp duty and charges
+    applies_to: [property_purchase]
+    description: Allocation of stamp duty, registration fees, taxes and transaction costs.
+
 # Source labels that are intentionally NOT clause classes.
 # Every CUAD category must appear either in `map` above or here (checked at build time).
 # LEDGAR labels not listed anywhere are reported as "unmapped" in stats.json.

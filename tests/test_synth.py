@@ -32,7 +32,7 @@ def test_every_template_slot_is_defined():
 
 
 def test_every_clause_has_three_risk_levels_and_flags():
-    assert len(SPECS) == 15
+    assert len(SPECS) == 21
     for spec in SPECS.values():
         assert len(spec.mods) == 3 and len(spec.flags) == 3
         assert spec.flags[0] == () and spec.flags[2], spec.clause_id  # green clean, red flagged

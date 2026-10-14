@@ -26,6 +26,8 @@ ROLE_NAME = {
     "bond_amount": "Bond amount", "bond_period": "Bond period", "training_cost": "Training cost",
     "recovery_period": "Recovery window", "retention_period": "Documents held for",
     "deduction_cap": "Deduction cap", "pay": "Pay", "date": "Date",
+    "purchase_price": "Purchase price", "booking_amount": "Booking amount",
+    "registration_charge": "Registration charge",
 }  # fmt: skip
 
 CLAUSE_INFO: dict[str, tuple[str, str]] = {
@@ -57,6 +59,18 @@ CLAUSE_INFO: dict[str, tuple[str, str]] = {
                            "Batata hai ki employer tere original documents rakhega ya nahi."),
     "salary_deductions": ("Lists what can be deducted from salary or stipend.",
                           "Salary ya stipend se kya kaata ja sakta hai, ye batata hai."),
+    "property_specifications": ("Covers the stated property area, layout, fixtures, amenities and changes the seller or builder may make.",
+                                "Property ka area, layout, fixtures, amenities aur seller/builder ke changes ke baare mein hai."),
+    "title_and_encumbrances": ("Covers title, ownership and disclosed liens or encumbrances. Verify title documents independently.",
+                               "Title, ownership aur liens/encumbrances ke baare mein hai. Title documents independently verify karo."),
+    "possession_handover": ("Covers possession timing, handover conditions and possible delay consequences.",
+                            "Possession ki timing, handover conditions aur delay ke consequences ke baare mein hai."),
+    "booking_payment": ("Covers booking money, purchase consideration and payment milestones.",
+                       "Booking amount, purchase price aur payment milestones ke baare mein hai."),
+    "cancellation_refund": ("Covers cancellation rights, refund conditions and possible forfeiture of paid amounts.",
+                            "Cancellation, refund conditions aur paid amount forfeit hone ke baare mein hai."),
+    "registration_charges": ("Covers stamp duty, registration fees and transaction charges.",
+                             "Stamp duty, registration fees aur transaction charges ke baare mein hai."),
 }  # fmt: skip
 
 # flag -> (reason en, tip en, reason hinglish, tip hinglish)
@@ -83,6 +97,26 @@ FLAG_TEXT: dict[str, tuple[str, str, str, str]] = {
         "The full amount is payable however much service you completed.",
         "Ask for a pro-rata amount based on the period not served.",
         "Kitni bhi service karo, poori amount deni padegi.", "Bacha hua period ke hisaab se pro-rata amount maango."),
+    "seller_specification_change": (
+        "The seller or builder may change important property specifications without prior written consent.",
+        "Ask for written buyer consent for material changes and a clear remedy if area or facilities are reduced.",
+        "Seller ya builder important property specifications bina written consent badal sakta hai.",
+        "Material changes ke liye buyer ki written consent aur area/facilities kam hone par remedy likhwao."),
+    "unclear_title": (
+        "The agreement does not clearly protect the buyer against title defects or undisclosed claims.",
+        "Have a property advocate independently verify title records and encumbrances before signing or paying.",
+        "Agreement title defects ya undisclosed claims se buyer ko clearly protect nahi karta.",
+        "Sign/payment se pehle property advocate se title records aur encumbrances verify karao."),
+    "possession_delay": (
+        "The wording may allow possession delays without a clear date or effective remedy.",
+        "Ask for a fixed possession date, defined extension reasons and written delay remedies.",
+        "Wording possession delay ko allow kar sakti hai bina clear date ya remedy ke.",
+        "Fixed possession date, extension ke reasons aur delay remedies likhwao."),
+    "booking_forfeiture": (
+        "The wording may allow booking money or payments to be forfeited broadly.",
+        "Clarify cancellation rights, permitted deductions, seller breach scenarios and refund deadlines.",
+        "Booking amount ya payments broadly forfeit ho sakte hain.",
+        "Cancellation rights, allowed deductions, seller breach aur refund deadline clear karao."),
     "unilateral_change": (
         "One side can change the terms or amount alone.", "Ask that changes need written consent of both sides.",
         "Ek side akele terms ya amount badal sakti hai.", "Changes ke liye dono ki written consent maango."),

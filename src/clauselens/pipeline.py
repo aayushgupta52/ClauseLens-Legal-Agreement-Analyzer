@@ -20,7 +20,7 @@ from clauselens.data.taxonomy import Taxonomy
 from clauselens.explain import RISK_LABEL, explain_clause
 from clauselens.facts import extract_facts
 from clauselens.gaps import GAP_TEXT, detect_doc_type, find_gaps
-from clauselens.hints import hint_label
+from clauselens.hints import hint_label, property_clause_label
 from clauselens.ingest import MAX_CHARS
 from clauselens.paths import MODELS
 from clauselens.pii import mask_pii
@@ -102,6 +102,7 @@ def make_nodes(engine: Engine) -> dict[str, Callable[[State], State]]:
             clause.update(
                 labels=["other"], top=[], confidence=None, primary="other", label_source="none"
             )
+        doc_type = state.get("doc_type", "unknown")
         for clause, pred in zip(body, preds, strict=True):
             labels = pred.labels or ["other"]
             top = [{"label": lab, "score": score} for lab, score in pred.top]
@@ -112,6 +113,13 @@ def make_nodes(engine: Engine) -> dict[str, Callable[[State], State]]:
                 primary=primary_label(labels, top),
                 label_source="classifier",
             )
+            # A precise property-sale phrase must override a misleading generic ML label,
+            # even when the ML model reports high confidence.
+            property_label = property_clause_label(doc_type, clause.get("heading"), clause["text"])
+            if property_label:
+                clause.update(labels=[property_label], primary=property_label,
+                              label_source="property_rule", confidence=max(pred.confidence, 0.85))
+                continue
             if engine.use_hints:
                 hint, kind = hint_label(clause["heading"], clause["text"])
                 weak = clause["primary"] == "other" or (clause["confidence"] or 0) < LOW_CONFIDENCE
@@ -129,12 +137,19 @@ def make_nodes(engine: Engine) -> dict[str, Callable[[State], State]]:
     def risk(state: State) -> State:
         clauses = state["clauses"]
         scored = [c for c in clauses if c["primary"] in RISK_CLAUSES]
-        probas = engine.risk.ml_predict([c["primary"] for c in scored], [c["text"] for c in scored])
+        # The current risk model was trained primarily on rental/employment clauses. For new
+        # property-only categories, use transparent rule flags until labelled property data exists.
+        property_rule_only = {"property_specifications", "title_and_encumbrances", "possession_handover",
+                              "booking_payment", "cancellation_refund", "registration_charges"}
+        model_scored = [c for c in scored if c["primary"] not in property_rule_only]
+        model_probas = engine.risk.ml_predict([c["primary"] for c in model_scored], [c["text"] for c in model_scored])
+        proba_by_index = {c["index"]: p for c, p in zip(model_scored, model_probas, strict=True)}
         for clause in clauses:
             clause.update(
                 risk=None, risk_source=None, flags=[], needs_review=False, review_reasons=[]
             )
-        for clause, proba in zip(scored, probas, strict=True):
+        for clause in scored:
+            proba = proba_by_index.get(clause["index"], {})
             result = engine.risk.assess(clause["primary"], clause["text"], clause["_facts"], proba)
             clause.update(
                 risk=result.risk,
@@ -178,6 +193,9 @@ def make_nodes(engine: Engine) -> dict[str, Callable[[State], State]]:
         lang = 0 if state.get("language", "en") == "en" else 1
         present = {c["primary"] for c in state["clauses"]}
         predictable = set(engine.classifier.active_labels)
+        if state.get("doc_type") == "property_purchase":
+            predictable.update({"property_specifications", "title_and_encumbrances", "possession_handover",
+                                "booking_payment", "cancellation_refund", "registration_charges"})
         names = {c.id: c.name for c in engine.taxonomy.clauses}
         missing = [
             {"clause_id": cid, "name": names.get(cid, cid), "message": GAP_TEXT[cid][lang]}
