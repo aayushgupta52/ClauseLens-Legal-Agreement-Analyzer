@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field, field_validator
 from clauselens import __version__
 from clauselens.calculators import bond_cost
 from clauselens.ingest import MAX_BYTES, MAX_CHARS, IngestError, extract_text
-from clauselens.paths import REPORTS
+from clauselens.paths import REPORTS, ROOT
 from clauselens.pii import mask_pii
 from clauselens.pipeline import Analyzer
 from clauselens.qa import ask
@@ -38,7 +38,7 @@ from clauselens.translation import (
 )
 
 WEB_DIR = Path(__file__).parent / "web"
-PROJECT_DIR = Path(__file__).resolve().parents[2]
+PROJECT_DIR = ROOT
 FRONTEND_DIST = PROJECT_DIR / "frontend" / "dist"
 Language = str
 
@@ -291,7 +291,7 @@ def create_app(analyzer: Analyzer | None = None, store: Store | None = None) -> 
         return await run_in_threadpool(_analyze, text, language, persist, source_language)
 
     @app.get("/api/sample")
-    def sample(doc_type: Literal["rent_agreement", "offer_and_bond", "property_purchase"] = "rent_agreement") -> dict:
+    def sample(doc_type: Literal["rent_agreement", "offer_and_bond"] = "rent_agreement") -> dict:
         doc = assemble_document(doc_type, _rng("sample", doc_type), doc_id="sample", pool=1)
         return {"doc_type": doc_type, "text": doc["text"]}
 
